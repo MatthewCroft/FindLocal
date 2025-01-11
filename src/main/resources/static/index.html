@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FindLocal</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"/>
+    <style>
+        body {
+            margin-top: 20px;
+            color: #1a202c;
+            text-align: left;
+            background-color: #e2e8f0;
+        }
+
+        .main-body {
+            padding: 15px;
+        }
+
+        .card {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+        }
+
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+        }
+
+        .card-body {
+            flex: 1 1 auto;
+            min-height: 1px;
+            padding: 1rem;
+        }
+
+        .gutters-sm {
+            margin-right: -8px;
+            margin-left: -8px;
+        }
+
+        .gutters-sm > .col, .gutters-sm > [class*=col-] {
+            padding-right: 8px;
+            padding-left: 8px;
+        }
+
+        .mb-3, .my-3 {
+            margin-bottom: 1rem !important;
+        }
+
+        .bg-gray-300 {
+            background-color: #e2e8f0;
+        }
+
+        .h-100 {
+            height: 100% !important;
+        }
+
+        .shadow-none {
+            box-shadow: none !important;
+        }
+
+        /* Optional: Some spacing adjustments for the horizontal scroll area */
+        .project-cards {
+            /* You can also set a fixed height if you like, e.g. height: 220px; */
+            overflow-x: auto;
+            white-space: nowrap; /* ensures items remain in one line */
+        }
+
+        .project-cards .card {
+            display: inline-block; /* so the cards align horizontally in one line */
+            vertical-align: top; /* keep them aligned at the top */
+            margin-right: 1rem; /* small spacing between cards */
+            width: 18rem; /* fixed width for each project card */
+        }
+
+        .scroll-card {
+            flex: 0 0 33.333%;
+        }
+
+        .btn-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: green;
+            padding: 0; /* remove extra padding */
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <style>
+        /* Container for label + image + icon */
+        .label-photo {
+            position: relative;
+            display: inline-block;
+            overflow: hidden; /* ensures the hover effect doesn't spill out */
+            cursor: pointer;
+        }
+
+        /* Smooth transition for image */
+        .label-photo img {
+            transition: filter 0.3s ease;
+        }
+
+        /* Dim or grayscale the image on hover */
+        .label-photo:hover img {
+            /* You could do just "opacity: 0.7" or "filter: grayscale(100%)" etc. */
+            filter: grayscale(100%) brightness(0.5);
+        }
+
+        /* Position the pencil icon (hidden by default) */
+        .edit-icon {
+            position: absolute;
+            color: #fff;
+            font-size: 2rem; /* adjust as you like */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0; /* start hidden */
+            transition: opacity 0.3s ease;
+        }
+
+        /* Show the pencil icon on hover */
+        .label-photo:hover .edit-icon {
+            opacity: 1;
+        }
+
+        .label-photo img {
+            width: 100%;
+            aspect-ratio: 16 / 9; /* or 3 / 2, 4 / 3, etc. */
+            object-fit: cover; /* Maintains aspect ratio, but crops overflow */
+        }
+    </style>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<!-- Modal -->
+<div class="modal fade" id="userModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="userModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="userModalLabel">Enter Your Details</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <div class="mb-3">
+                        <label for="usernameInput" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="usernameInput" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailInput" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="emailInput" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary" id="saveUserBtn">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="welcomeBackModal" tabindex="-1" aria-labelledby="autoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="autoModalLabel">Hello There</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="welcomeBackMessage" class="modal-body"></div>
+        </div>
+    </div>
+</div>
+
+<div id="profilePictures" class="container mb-4">
+    <div class="row g-0">
+        <div class="col-12 col-md-3">
+            <label class="label-photo" style="cursor: pointer;">
+                <input
+                        type="file"
+                        id="fileInput1"
+                        accept="image/png, image/jpeg"
+                        style="display: none;"
+                        onchange="handleImageChange(event, 'img1')"
+                />
+                <img
+                        src=""
+                        class="img-fluid w-100"
+                        alt="Collage 1"
+                        id="img1"
+                />
+                <i class="bi bi-pencil-fill edit-icon"></i>
+            </label>
+        </div>
+        <div class="col-12 col-md-3">
+            <label class="label-photo" style="cursor: pointer;">
+                <input
+                        type="file"
+                        id="fileInput2"
+                        accept="image/png, image/jpeg"
+                        style="display: none;"
+                        onchange="handleImageChange(event, 'img2')"
+                />
+                <img
+                        src=""
+                        class="img-fluid w-100"
+                        alt="Collage 2"
+                        id="img2"
+                />
+                <i class="bi bi-pencil-fill edit-icon"></i>
+            </label>
+        </div>
+        <div class="col-12 col-md-3">
+            <label class="label-photo" style="cursor: pointer;">
+                <input
+                        type="file"
+                        id="fileInput3"
+                        accept="image/png, image/jpeg"
+                        style="display: none;"
+                        onchange="handleImageChange(event, 'img3')"
+                />
+                <img
+                        src=""
+                        class="img-fluid w-100"
+                        alt="Collage 3"
+                        id="img3"
+                />
+                <i class="bi bi-pencil-fill edit-icon"></i>
+            </label>
+        </div>
+        <div class="col-12 col-md-3">
+            <label class="label-photo" style="cursor: pointer;">
+                <input
+                        type="file"
+                        id="fileInput4"
+                        accept="image/png, image/jpeg"
+                        style="display: none;"
+                        onchange="handleImageChange(event, 'img4')"
+                />
+                <img
+                        src=""
+                        class="img-fluid w-100"
+                        alt="Collage 4"
+                        id="img4"
+                />
+                <i class="bi bi-pencil-fill edit-icon"></i>
+            </label>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row gutters-sm">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex flex-column align-items-center text-center">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle"
+                             width="150">
+                        <div class="mt-3">
+                            <h4 id="name"></h4>
+                            <p id="phone" class="text-secondary mb-1"></p>
+                            <p id="email" class="text-secondary mb-1"></p>
+                            <p id="location" class="text-secondary mb-1"></p>
+                            <button class="btn btn-primary">Message</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8 mb-3">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column justify-content-center text-left">
+                                <div class="mt-3">
+                                    <h4 class="card-title">About</h4>
+                                    <p id="description" class="text-secondary mb-1"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column text-left">
+                                <div class="mt-3">
+                                    <h4 class="card-title">Offerings</h4>
+                                    <p class="text-primary mb-1">this is what we have to offer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row gutters-sm">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">Projects</div>
+                    <div class="d-flex overflow-auto">
+                        <div class="card me-2 scroll-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="card-title">Item 1</h5>
+                                    <button class="btn btn-primary btn-circle">
+                                        <i class="bi bi-pen"></i>
+                                    </button>
+                                </div>
+                                <p class="card-text">Description</p>
+                            </div>
+                        </div>
+                        <div class="card me-2 scroll-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Item 1</h5>
+                                <p class="card-text">Description</p>
+                            </div>
+                        </div>
+                        <div class="card me-2 scroll-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Item 1</h5>
+                                <p class="card-text">Description</p>
+                            </div>
+                        </div>
+                        <div class="card me-2 scroll-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Item 1</h5>
+                                <p class="card-text">Description</p>
+                            </div>
+                        </div>
+                        <div class="card me-2 scroll-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Item 1</h5>
+                                <p class="card-text">Description</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS + Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery -->
+<script src="javascript/welcome-user.js"></script>
+<script src="javascript/user-profile.js"></script>
+</body>
+</html>
