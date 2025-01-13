@@ -12,10 +12,23 @@ public class UserProjectImage {
     @Column(nullable = false, columnDefinition = "LONGTEXT")
     private String data;
 
+    @OneToOne
+    @JoinColumn(name = "user_featured_image")
+    @JsonIgnore
+    UserProject featuredImage;
+
     @ManyToOne
     @JoinColumn(name = "user_project_id")
     @JsonIgnore
     UserProject userProject;
+
+    public UserProject getFeaturedImage() {
+        return featuredImage;
+    }
+
+    public void setFeaturedImage(UserProject featuredImage) {
+        this.featuredImage = featuredImage;
+    }
 
     public Long getId() {
         return id;

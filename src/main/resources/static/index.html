@@ -176,6 +176,65 @@
     </div>
 </div>
 
+<div class="modal fade" id="userProjectsModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Add Project</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="userProjectForm">
+                   <div class="row">
+                       <div class="col-6">
+                           <div class="d-flex flex-column align-items-center">
+                               <div class="mb-3">
+                                   <label class="form-label" for="title">Project title</label>
+                                   <input class="form-control" type="text" id="title">
+                               </div>
+                               <div class="mb-3">
+                                   <label class="form-label" for="projectDescription">About</label>
+                                   <input class="form-control" type="text" id="projectDescription">
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col-6">
+                           <div class="d-flex flex-column align-items-center justify-content-center">
+                              <div class="mb-3">
+                                  <label class="btn btn-primary" for="projectFeaturedImage" style="cursor: pointer;">
+                                      Featured Image
+                                      <i class="bi bi-pencil-fill"></i>
+                                      <i class="bi bi-card-image"></i>
+                                  <input type="file"
+                                         id="projectFeaturedImage"
+                                         accept="image/png, image/jpeg"
+                                         style="display: none;"
+                                         onchange="handleImageChange(event, 'img1')" >
+                                  </label>
+                              </div>
+                               <div class="mb-3">
+                                   <label class="btn btn-primary" for="projectImages" style="cursor: pointer;">
+                                       Project images
+                                       <i class="bi bi-pencil-fill"></i>
+                                       <i class="bi bi-images"></i>
+                                       <input type="file"
+                                              id="projectImages"
+                                              accept="image/png, image/jpeg"
+                                              style="display: none;"
+                                              onchange="handleImageChange(event, 'img1')"
+                                              multiple
+                                       >
+                                   </label>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="welcomeBackModal" tabindex="-1" aria-labelledby="autoModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -188,6 +247,7 @@
         </div>
     </div>
 </div>
+
 
 <div id="profilePictures" class="container mb-4">
     <div class="row g-0">
@@ -318,7 +378,12 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title">Projects</div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="card-title">Projects</div>
+                        <button id="projectAdd" class="btn btn-primary btn-circle">
+                            <i class="bi bi-pen"></i>
+                        </button>
+                    </div>
                     <div class="d-flex overflow-auto">
                         <div class="card me-2 scroll-card">
                             <div class="card-body">

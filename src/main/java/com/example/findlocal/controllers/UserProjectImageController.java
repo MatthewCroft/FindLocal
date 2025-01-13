@@ -59,6 +59,30 @@ public class UserProjectImageController {
                 .ok(createdUserProjectImage);
     }
 
+    @PostMapping("/featured")
+    public ResponseEntity<UserProjectImage> addFeaturedProjectImage(@PathVariable Long projectId, @RequestPart("file") MultipartFile file) {
+        if (projectId == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .build();
+        }
+
+        UserProjectImage projectImage = new UserProjectImage();
+
+        try {
+            projectImage.setData(Base64.getEncoder().encodeToString(file.getBytes()));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .badRequest()
+                    .build();
+        }
+
+        UserProjectImage createdImage = userProjectImageService.addUserProjectFeaturedImage(projectId, projectImage);
+
+        return ResponseEntity
+                .ok(createdImage);
+    }
+
     @DeleteMapping("{imageId}")
     public ResponseEntity<String> deleteUserProjectImage(Long imageId) {
         if (imageId == null) {

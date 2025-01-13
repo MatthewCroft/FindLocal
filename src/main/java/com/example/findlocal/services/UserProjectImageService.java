@@ -35,4 +35,12 @@ public class UserProjectImageService {
 
         userProjectImageRepository.delete(userProjectImage);
     }
+
+    public UserProjectImage addUserProjectFeaturedImage(Long projectId, UserProjectImage projectImage) {
+        UserProject userProject = userProjectService.getUserProjectById(projectId);
+
+        projectImage.setFeaturedImage(userProject);
+
+        return userProjectImageRepository.save(projectImage);
+    }
 }

@@ -20,7 +20,7 @@ public class UserProjectService {
     }
 
     public List<UserProject> getUserProjectsByProfileId(Long profileId) {
-        return userProjectRepository.findAllByProjectId(profileId);
+        return userProjectRepository.findAllByProfileId(profileId);
     }
 
     public UserProject addUserProject(Long profileId, UserProject userProject) {

@@ -21,9 +21,20 @@ public class UserProject {
     @JsonIgnore
     private UserProfile profile;
 
+    @OneToOne(mappedBy = "featuredImage")
+    private UserProjectImage featuredProjectImage;
+
     @OneToMany(mappedBy = "userProject")
     @JsonIgnore
     private Set<UserProjectImage> projectImages;
+
+    public UserProjectImage getFeaturedProjectImage() {
+        return featuredProjectImage;
+    }
+
+    public void setFeaturedProjectImage(UserProjectImage featuredProjectImage) {
+        this.featuredProjectImage = featuredProjectImage;
+    }
 
     public String getTitle() {
         return title;

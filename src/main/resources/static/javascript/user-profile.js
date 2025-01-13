@@ -1,6 +1,8 @@
 let userId = null;
 let profileId = null;
-let photos = [];
+let profileImages= [];
+let offerings = [];
+let projects = new Map();
 
 async function getUser() {
     const userResponse = await fetch(`http://localhost:8080/api/user?userName=${localStorage.getItem('userName')}`,
@@ -11,6 +13,36 @@ async function getUser() {
             }
         });
     return await userResponse.json();
+}
+
+async function getUserProfileOfferings(userId, profileId) {
+    const userOfferingsResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/offering`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    return await userOfferingsResponse.json();
+}
+
+async function getUserProfileProjects(userId, profileId) {
+    const userProfileProjectsResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/project`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    return await userProfileProjectsResponse.json();
+}
+
+async function getUserProfileProjectsImages(userId, profileId, projectId) {
+    const userProfileProjectImageResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/image`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    return await userProfileProjectImageResponse.json();
 }
 
 async function getUserProfile(data) {
@@ -53,17 +85,33 @@ async function userProfile() {
     }
     profileId = userProfileJson.id;
     userId = userResponse.id;
-    photos = await getUserProfilePhotos(userId, profileId);
+    profileImages = await getUserProfilePhotos(userId, profileId);
 
-    for (let photo of photos) {
-        document.getElementById(photo.elementId).src = `data:image/png;base64,${photo.data}`;
+    for (const image of profileImages) {
+        document.getElementById(image.elementId).src = `data:image/png;base64,${image.data}`;
     }
+
+    //todo: get user projects(and photos), also get user offerings
+    const userProfileProjects = await getUserProfileProjects(userId, profileId);
+    console.log(userProfileProjects);
+    for (const project of userProfileProjects) {
+        const images = await getUserProfileProjectsImages(userId, profileId, project.id);
+        projects.set(project.id, JSON.stringify({
+            project,
+            images
+        }));
+    }
+    console.log(projects);
+    offerings = await getUserProfileOfferings(userId, profileId);
+    console.log(offerings);
 
     $('#description').text(`${userProfileJson.description}`);
     $('#name').text(`${userResponse.username}`);
-    userResponse.phone ? $('#phone').text(`${userResponse.phone}`) : null;
-    userResponse.email ? $('#email').text(`${userResponse.email}`) : null;
+    userResponse.phone && $('#phone').text(`${userResponse.phone}`);
+    userResponse.email && $('#email').text(`${userResponse.email}`);
 }
+
+//async function addProjectFeaturedImage
 
 async function handleImageChange(event, elementId) {
     const file = event.target.files[0];
@@ -98,4 +146,5 @@ async function updateImage(file, elementId) {
 $(document).ready(() => {
     $('#welcomeBackModal').on('hide.bs.modal', userProfile);
     $('#userModal').on('hide.bs.modal', userProfile);
+    $('#projectAdd').on('click', () => $('#userProjectsModal').modal('show'));
 })
