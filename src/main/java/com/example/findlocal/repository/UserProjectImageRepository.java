@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface UserProjectImageRepository extends JpaRepository<UserProjectImage, Long> {
     List<UserProjectImage> findAllByUserProjectId(Long userProjectId);
+    UserProjectImage findByFeaturedImageId(Long featuredImageId);
 }

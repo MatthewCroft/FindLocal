@@ -3,78 +3,8 @@ let profileId = null;
 let profileImages= [];
 let offerings = [];
 let projects = new Map();
-
-async function getUser() {
-    const userResponse = await fetch(`http://localhost:8080/api/user?userName=${localStorage.getItem('userName')}`,
-        {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-    return await userResponse.json();
-}
-
-async function getUserProfileOfferings(userId, profileId) {
-    const userOfferingsResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/offering`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    return await userOfferingsResponse.json();
-}
-
-async function getUserProfileProjects(userId, profileId) {
-    const userProfileProjectsResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/project`, {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    return await userProfileProjectsResponse.json();
-}
-
-async function getUserProfileProjectsImages(userId, profileId, projectId) {
-    const userProfileProjectImageResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/image`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-    return await userProfileProjectImageResponse.json();
-}
-
-async function getUserProfile(data) {
-    const userProfileResponse = await fetch(`http://localhost:8080/api/user/${data.id}/profile`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    return await userProfileResponse.json();
-}
-
-async function createUserProfile(data) {
-    const createdProfileResponse = await fetch(`http://localhost:8080/api/user/${data.id}/profile`,{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            description: "",
-            title: ""
-        })
-    });
-    return await createdProfileResponse.json();
-}
-
-async function getUserProfilePhotos(userId, profileId) {
-    const userPhotosResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/image`, {
-        method: "GET"
-    });
-    return await userPhotosResponse.json();
-}
+let featuredImage = null;
+let projectImages = null;
 
 async function userProfile() {
     const userResponse = await getUser();
@@ -111,36 +41,35 @@ async function userProfile() {
     userResponse.email && $('#email').text(`${userResponse.email}`);
 }
 
-//async function addProjectFeaturedImage
+//todo: once we want to handle submit of a project implement this
+async function addProjectFeaturedImage(event, elementId) {
+    const file = event.target.files[0];
 
+    if (file) {
+    }
+}
+
+function loadImage(imageData, elementId) {
+    document.getElementById(elementId).src = imageData;
+}
+
+async function handleFeaturedImageChange(event, elementId) {
+    const file = event.target.files[0];
+    console.log(file);
+
+    $('#featuredImageContainer').removeClass('d-none');
+    if (file) {
+        loadImage(URL.createObjectURL(file), elementId);
+    }
+}
 async function handleImageChange(event, elementId) {
     const file = event.target.files[0];
 
     if (file) {
-        const imageUploadJson = await updateImage(file, elementId);
+        const imageUploadJson = await updateProfileImage(file, elementId, projectImages);
         console.log(imageUploadJson);
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            document.getElementById(elementId).src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+        loadImage(imageUploadJson.data, elementId);
     }
-}
-
-async function updateImage(file, elementId) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('profileImage', JSON.stringify({
-        'name': file.name,
-        'elementId': elementId
-    }));
-
-    const oldImage = photos.find(photo => photo.elementId === elementId)
-    const imageUploadResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/image/${oldImage.id}`, {
-        method: 'PUT',
-        body: formData
-    });
-    return await imageUploadResponse.json();
 }
 
 $(document).ready(() => {

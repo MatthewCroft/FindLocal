@@ -83,6 +83,20 @@ public class UserProjectImageController {
                 .ok(createdImage);
     }
 
+    @GetMapping("/featured")
+    public ResponseEntity<UserProjectImage> getUserProjectFeaturedImage(Long projectId) {
+        if (projectId == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .build();
+        }
+
+        UserProjectImage featuredImage = userProjectImageService.getUserProjectFeaturedImage(projectId);
+
+        return ResponseEntity
+                .ok(featuredImage);
+    }
+
     @DeleteMapping("{imageId}")
     public ResponseEntity<String> deleteUserProjectImage(Long imageId) {
         if (imageId == null) {

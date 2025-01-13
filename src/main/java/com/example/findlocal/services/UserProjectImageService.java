@@ -43,4 +43,8 @@ public class UserProjectImageService {
 
         return userProjectImageRepository.save(projectImage);
     }
+
+    public UserProjectImage getUserProjectFeaturedImage(Long featuredImageId) {
+        return userProjectImageRepository.findByFeaturedImageId(featuredImageId);
+    }
 }
