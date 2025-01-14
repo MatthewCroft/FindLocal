@@ -22,7 +22,7 @@ public class UserProjectImageController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserProjectImage>> getUserProjectImages(Long projectId) {
+    public ResponseEntity<List<UserProjectImage>> getUserProjectImages(@PathVariable Long projectId) {
         if (projectId == null) {
             return ResponseEntity
                     .badRequest()
@@ -84,7 +84,7 @@ public class UserProjectImageController {
     }
 
     @GetMapping("/featured")
-    public ResponseEntity<UserProjectImage> getUserProjectFeaturedImage(Long projectId) {
+    public ResponseEntity<UserProjectImage> getUserProjectFeaturedImage(@PathVariable Long projectId) {
         if (projectId == null) {
             return ResponseEntity
                     .badRequest()
@@ -98,7 +98,7 @@ public class UserProjectImageController {
     }
 
     @DeleteMapping("{imageId}")
-    public ResponseEntity<String> deleteUserProjectImage(Long imageId) {
+    public ResponseEntity<String> deleteUserProjectImage(@PathVariable Long imageId) {
         if (imageId == null) {
             return ResponseEntity
                     .badRequest()

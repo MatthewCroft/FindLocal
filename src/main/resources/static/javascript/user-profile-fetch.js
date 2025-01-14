@@ -25,12 +25,39 @@ async function updateProfileImage(file, elementId, images) {
     return await imageUploadResponse.json();
 }
 
-async function updateFeaturedImage(file) {
+async function addUserProjectImage(file, projectId) {
     const formData = new FormData();
     formData.append('file', file);
 
-   const featuredImageResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/image/featured`, {
-       method: 'PUT',
+    const addUserProjectImageResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/project/${projectId}/image`, {
+        method: "POST",
+        body: formData
+    });
+
+    return await addUserProjectImageResponse.json();
+}
+
+async function createUserProject(title, description) {
+   const userProjectCreateResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/project`, {
+       method: 'POST',
+       headers: {
+           'Content-Type': 'application/json'
+       },
+       body: JSON.stringify({
+           title,
+           description
+       })
+   })
+
+    return await userProjectCreateResponse.json();
+}
+
+async function updateFeaturedImage(file, projectId) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+   const featuredImageResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/project/${projectId}/image/featured`, {
+       method: 'POST',
        body: formData
    });
 
@@ -58,7 +85,7 @@ async function getUserProfileProjects(userId, profileId) {
 }
 
 async function getUserProfileProjectsImages(userId, profileId, projectId) {
-    const userProfileProjectImageResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/project/${projectId}`, {
+    const userProfileProjectImageResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/project/${projectId}/image`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

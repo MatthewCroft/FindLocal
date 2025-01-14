@@ -231,11 +231,43 @@
                                               id="projectImages"
                                               accept="image/png, image/jpeg"
                                               style="display: none;"
-                                              onchange="handleProjectImagesChange(event, 'img1')"
+                                              onchange="handleProjectImagesChange(event)"
                                               multiple
                                        >
-                                       Preview
                                    </label>
+                                   <div id="projectImagesContainer" class="d-none">
+                                       Preview
+                                       <div class="row">
+                                           <div class="col-6 d-flex flex-column">
+                                               <img
+                                                       src=""
+                                                       class="img-fluid w-100 d-none"
+                                                       alt="Collage 1"
+                                                       id="projectImage-0"
+                                               />
+                                               <img
+                                                       src=""
+                                                       class="img-fluid w-100 d-none"
+                                                       alt="Collage 1"
+                                                       id="projectImage-1"
+                                               />
+                                           </div>
+                                           <div class="col-6 d-flex flex-column">
+                                               <img
+                                                       src=""
+                                                       class="img-fluid w-100 d-none"
+                                                       alt="Collage 1"
+                                                       id="projectImage-2"
+                                               />
+                                               <img
+                                                       src=""
+                                                       class="img-fluid w-100 d-none"
+                                                       alt="Collage 1"
+                                                       id="projectImage-3"
+                                               />
+                                           </div>
+                                       </div>
+                                   </div>
                                </div>
                            </div>
                        </div>

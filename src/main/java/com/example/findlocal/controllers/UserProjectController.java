@@ -35,7 +35,7 @@ public class UserProjectController {
 
     @PostMapping
     public ResponseEntity<UserProject> createUserProject(@PathVariable Long profileId, @RequestBody UserProject userProject) {
-        if (profileId == null) {
+        if (profileId == null || userProject.getTitle() == null) {
             return ResponseEntity
                     .badRequest()
                     .build();
