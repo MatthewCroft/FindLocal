@@ -74,6 +74,8 @@ async function getUserProfileOfferings(userId, profileId) {
     return await userOfferingsResponse.json();
 }
 
+//todo: create offering
+
 async function getUserProfileProjects(userId, profileId) {
     const userProfileProjectsResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/project`, {
         method: "GET",

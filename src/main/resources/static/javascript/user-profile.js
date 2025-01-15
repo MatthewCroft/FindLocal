@@ -1,6 +1,6 @@
 let userId = null;
 let profileId = null;
-let profileImages= [];
+let profileImages = [];
 let offerings = [];
 let projects = new Map();
 let featuredImage = null;
@@ -11,7 +11,7 @@ async function userProfile() {
     let userProfileJson = await getUserProfile(userResponse);
 
     if (!userProfileJson.id) {
-       userProfileJson = await createUserProfile(userResponse);
+        userProfileJson = await createUserProfile(userResponse);
     }
     profileId = userProfileJson.id;
     userId = userResponse.id;
@@ -26,14 +26,48 @@ async function userProfile() {
     console.log(userProfileProjects);
     for (const project of userProfileProjects) {
         const images = await getUserProfileProjectsImages(userId, profileId, project.id);
-        projects.set(project.id, JSON.stringify({
+        console.log(images);
+        projects.set(project.id, {
             project,
             images
-        }));
+        });
     }
-    console.log(projects);
+
+    for (const key of projects.keys()) {
+        const project = projects.get(key);
+        console.log(project);
+        $('#projectsContainer').append(`
+           <div class="card me-2 scroll-card">
+               <div class="card-body">
+                <div class="row">
+                    <div class="col-6">
+                        <h5 class="card-title">${project.project.title}</h5>
+                        <p class="card-text">${project.project.description}</p>
+                    </div>
+                    <div class="col-6">
+                       <img
+                            class="project-img"
+                            src="data:image/png;base64,${project.project.featuredProjectImage.data}"
+                            class=""
+                            alt="Collage 4"
+                         />
+                    </div>
+                </div>
+               </div>
+           </div>
+        `);
+    }
+
     offerings = await getUserProfileOfferings(userId, profileId);
     console.log(offerings);
+
+    for (const offering of offerings) {
+        $('#offerings-section').append(`
+            <div class="col-2">
+                <span class="badge bg-secondary">${offering}</span>
+            </div>
+        `);
+    }
 
     $('#description').text(`${userProfileJson.description}`);
     $('#name').text(`${userResponse.username}`);
@@ -47,7 +81,6 @@ function loadImage(imageData, elementId) {
 
 function handleFeaturedImageChange(event, elementId) {
     const file = event.target.files[0];
-    console.log(file);
 
     $('#featuredImageContainer').removeClass('d-none');
     if (file) {
@@ -57,22 +90,22 @@ function handleFeaturedImageChange(event, elementId) {
 }
 
 function handleProjectImagesChange(event) {
-   const files = event.target.files;
+    const files = event.target.files;
     $('#projectImagesContainer').addClass('d-none');
     $(`#projectImage-0`).addClass('d-none');
     $(`#projectImage-1`).addClass('d-none');
     $(`#projectImage-2`).addClass('d-none');
     $(`#projectImage-3`).addClass('d-none');
 
-   if (files.length > 0) {
-       $('#projectImagesContainer').removeClass('d-none');
-       projectImages = [...event.target.files];
-   }
+    if (files.length > 0) {
+        $('#projectImagesContainer').removeClass('d-none');
+        projectImages = [...event.target.files];
+    }
 
-   for (let i = 0; i < files.length && i < 4; i++) {
-       $(`#projectImage-${i}`).removeClass('d-none');
-       loadImage(URL.createObjectURL(files[i]), `projectImage-${i}`);
-   }
+    for (let i = 0; i < files.length && i < 4; i++) {
+        $(`#projectImage-${i}`).removeClass('d-none');
+        loadImage(URL.createObjectURL(files[i]), `projectImage-${i}`);
+    }
 }
 
 async function handleImageChange(event, elementId) {
@@ -87,7 +120,6 @@ async function handleImageChange(event, elementId) {
 
 async function addUserProject(event) {
     event.preventDefault();
-    console.log("here");
     const projectTitle = $('#title').val();
     const projectDescription = $('#projectDescription').val();
 

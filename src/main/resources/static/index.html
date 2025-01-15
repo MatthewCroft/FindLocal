@@ -32,7 +32,7 @@
             word-wrap: break-word;
             background-color: #fff;
             background-clip: border-box;
-            border: 0 solid rgba(0, 0, 0, .125);
+            border: 1px solid rgba(0, 0, 0, .125);
             border-radius: .25rem;
         }
 
@@ -139,6 +139,12 @@
             aspect-ratio: 16 / 9; /* or 3 / 2, 4 / 3, etc. */
             object-fit: cover; /* Maintains aspect ratio, but crops overflow */
         }
+
+        .project-img {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
@@ -216,7 +222,7 @@
                                       Preview
                                       <img
                                               src=""
-                                              class="img-fluid w-100"
+                                              class="project-img"
                                               alt="Collage 1"
                                               id="featuredImagePreview"
                                       />
@@ -241,13 +247,13 @@
                                            <div class="col-6 d-flex flex-column">
                                                <img
                                                        src=""
-                                                       class="img-fluid w-100 d-none"
+                                                       class="img-fluid w-100 d-none project-img mb-2"
                                                        alt="Collage 1"
                                                        id="projectImage-0"
                                                />
                                                <img
                                                        src=""
-                                                       class="img-fluid w-100 d-none"
+                                                       class="img-fluid w-100 d-none project-img mb-2"
                                                        alt="Collage 1"
                                                        id="projectImage-1"
                                                />
@@ -255,13 +261,13 @@
                                            <div class="col-6 d-flex flex-column">
                                                <img
                                                        src=""
-                                                       class="img-fluid w-100 d-none"
+                                                       class="img-fluid w-100 d-none project-img mb-2"
                                                        alt="Collage 1"
                                                        id="projectImage-2"
                                                />
                                                <img
                                                        src=""
-                                                       class="img-fluid w-100 d-none"
+                                                       class="img-fluid w-100 d-none project-img mb-2"
                                                        alt="Collage 1"
                                                        id="projectImage-3"
                                                />
@@ -410,7 +416,8 @@
                             <div class="d-flex flex-column text-left">
                                 <div class="mt-3">
                                     <h4 class="card-title">Offerings</h4>
-                                    <p class="text-primary mb-1">this is what we have to offer</p>
+                                    <div id="offerings-section" class="row">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -430,42 +437,7 @@
                             <i class="bi bi-pen"></i>
                         </button>
                     </div>
-                    <div class="d-flex overflow-auto">
-                        <div class="card me-2 scroll-card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title">Item 1</h5>
-                                    <button class="btn btn-primary btn-circle">
-                                        <i class="bi bi-pen"></i>
-                                    </button>
-                                </div>
-                                <p class="card-text">Description</p>
-                            </div>
-                        </div>
-                        <div class="card me-2 scroll-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Item 1</h5>
-                                <p class="card-text">Description</p>
-                            </div>
-                        </div>
-                        <div class="card me-2 scroll-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Item 1</h5>
-                                <p class="card-text">Description</p>
-                            </div>
-                        </div>
-                        <div class="card me-2 scroll-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Item 1</h5>
-                                <p class="card-text">Description</p>
-                            </div>
-                        </div>
-                        <div class="card me-2 scroll-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Item 1</h5>
-                                <p class="card-text">Description</p>
-                            </div>
-                        </div>
+                    <div id="projectsContainer" class="d-flex overflow-auto">
                     </div>
                 </div>
 
