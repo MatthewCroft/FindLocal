@@ -63,9 +63,7 @@ async function userProfile() {
 
     for (const offering of offerings) {
         $('#offerings-section').append(`
-            <div class="col-2">
-                <span class="badge bg-secondary">${offering}</span>
-            </div>
+          <span class="badge bg-secondary">${offering.offer}</span>
         `);
     }
 
@@ -132,9 +130,24 @@ async function addUserProject(event) {
     }
 }
 
+//todo: add input validation for this and other forms
+async function addOffering(event) {
+    event.preventDefault();
+
+    const offering = $('#offering').val().trim();
+    const createOfferingResponse = await createUserProfileOffering(offering, profileId);
+
+    $('#offerings-modal').modal('hide');
+    console.log(createOfferingResponse);
+}
+
 $(document).ready(() => {
     $('#welcomeBackModal').on('hide.bs.modal', userProfile);
     $('#userModal').on('hide.bs.modal', userProfile);
     $('#projectAdd').on('click', () => $('#userProjectsModal').modal('show'));
-    $('#userProjectForm').on('submit', addUserProject);
+    $('#userProjectForm').on('submit', () =>  addUserProject());
+    $('#add-offering').on('click', () => $('#offerings-modal').modal('show'));
+    $('#cancel-create-offering').on('click', () => $('#offerings-modal').modal('hide'));
+    $('#offerings-modal').on('shown.bs.modal', () => $('#offering').focus());
+    $('#offerings-modal').on('submit', addOffering);
 })

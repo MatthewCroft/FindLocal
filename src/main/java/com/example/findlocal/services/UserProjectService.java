@@ -2,6 +2,8 @@ package com.example.findlocal.services;
 
 import com.example.findlocal.entity.UserProfile;
 import com.example.findlocal.entity.UserProject;
+import com.example.findlocal.exception.UserProfileNotFoundException;
+import com.example.findlocal.exception.UserProjectNotFoundException;
 import com.example.findlocal.repository.UserProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,12 +33,11 @@ public class UserProjectService {
 
     public UserProject getUserProjectById(Long projectId) {
         return userProjectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException(String.format("project not found with id %d", projectId)));
+                .orElseThrow(() -> new UserProjectNotFoundException(String.format("UserProject not found with projectId %d", projectId)));
     }
 
     public UserProject updateUserProject(Long projectId, UserProject userProject) {
-        UserProject updateProject = userProjectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("UserProject not found"));
+        UserProject updateProject = getUserProjectById(projectId);
 
         updateProject.setDescription(userProject.getDescription());
         updateProject.setTitle(userProject.getTitle());

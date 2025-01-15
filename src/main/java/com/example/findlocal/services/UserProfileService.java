@@ -3,6 +3,7 @@ package com.example.findlocal.services;
 import com.example.findlocal.entity.ProfileImage;
 import com.example.findlocal.entity.User;
 import com.example.findlocal.entity.UserProfile;
+import com.example.findlocal.exception.UserProfileNotFoundException;
 import com.example.findlocal.repository.UserProfileRepository;
 import com.example.findlocal.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,15 +38,26 @@ public class UserProfileService {
 
     public UserProfile getUserProfileById(Long userProfileId) {
         return userProfileRepository.findById(userProfileId)
-                .orElseThrow(() -> new RuntimeException(String.format("userprofile not found for %d", userProfileId)));
+                .orElseThrow(() -> new UserProfileNotFoundException(String.format("User profile not found getUserProfileById %d", userProfileId)));
     }
 
     public UserProfile getUserProfileByUserId(Long userId) {
-        return userProfileRepository.findByUserId(userId);
+        UserProfile userProfile = userProfileRepository.findByUserId(userId);
+
+        if (userProfile == null) {
+            throw new UserProfileNotFoundException(String.format("User profile not found getUserProfileByUserId with userId %d", userId));
+        }
+
+        return userProfile;
     }
 
     public UserProfile updateUserProfile(Long userId, String description, String title) {
         UserProfile userProfile = getUserProfileByUserId(userId);
+
+        if (userProfile == null) {
+            throw new UserProfileNotFoundException(String.format("User profile not found updateUserProfile with userId %d", userId));
+        }
+
         userProfile.setTitle(title);
         userProfile.setDescription(description);
         return userProfileRepository.save(userProfile);

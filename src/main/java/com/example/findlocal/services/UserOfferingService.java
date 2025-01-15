@@ -2,8 +2,10 @@ package com.example.findlocal.services;
 
 import com.example.findlocal.entity.UserOffering;
 import com.example.findlocal.entity.UserProfile;
+import com.example.findlocal.exception.UserProfileNotFoundException;
 import com.example.findlocal.repository.UserOfferingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +25,7 @@ public class UserOfferingService {
       UserProfile userProfile = userProfileService.getUserProfileById(profileId);
 
       if (userProfile == null || userProfile.getId() == null) {
-         throw new RuntimeException("user profile does not exist to add offering");
+         throw new UserProfileNotFoundException("user profile does not exist to add offering");
       }
 
       offering.setUserProfile(userProfile);

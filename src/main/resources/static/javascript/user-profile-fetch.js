@@ -75,6 +75,19 @@ async function getUserProfileOfferings(userId, profileId) {
 }
 
 //todo: create offering
+async function createUserProfileOffering(offer, profileId) {
+    const userOfferingCreateResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/offering`, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            offer
+        })
+    });
+
+    return await userOfferingCreateResponse.json();
+}
 
 async function getUserProfileProjects(userId, profileId) {
     const userProfileProjectsResponse = await fetch(`http://localhost:8080/api/user/${userId}/profile/${profileId}/project`, {
@@ -83,6 +96,7 @@ async function getUserProfileProjects(userId, profileId) {
             'Content-Type': 'application/json'
         }
     });
+
     return await userProfileProjectsResponse.json();
 }
 

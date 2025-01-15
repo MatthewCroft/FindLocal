@@ -2,6 +2,7 @@ package com.example.findlocal.services;
 
 import com.example.findlocal.entity.UserProject;
 import com.example.findlocal.entity.UserProjectImage;
+import com.example.findlocal.exception.ProfileImageNotFoundException;
 import com.example.findlocal.repository.UserProjectImageRepository;
 import com.example.findlocal.repository.UserProjectRepository;
 import org.springframework.stereotype.Service;
@@ -24,14 +25,14 @@ public class UserProjectImageService {
     }
 
     public UserProjectImage addUserProjectImage(Long projectId, UserProjectImage userProjectImage) {
-        UserProject userProject =  userProjectService.getUserProjectById(projectId);
+        UserProject userProject = userProjectService.getUserProjectById(projectId);
         userProjectImage.setUserProject(userProject);
         return userProjectImageRepository.save(userProjectImage);
     }
 
     public void removeUserProjectImage(Long imageId) {
         UserProjectImage userProjectImage = userProjectImageRepository.findById(imageId)
-                .orElseThrow(() -> new RuntimeException("UserProjectImage find error"));
+                .orElseThrow(() -> new ProfileImageNotFoundException("UserProjectImage find error"));
 
         userProjectImageRepository.delete(userProjectImage);
     }
