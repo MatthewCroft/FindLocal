@@ -53,8 +53,10 @@ public class UserController {
                     .build();
         }
 
+        User createdUser = userService.createUser(user);
+
         return ResponseEntity.ok(
-                userService.createUser(user.getUsername(), user.getEmail())
+                createdUser
         );
     }
 }
